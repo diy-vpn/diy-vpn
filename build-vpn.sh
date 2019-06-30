@@ -1,10 +1,10 @@
 #!/bin/bash
 
-# 7 minute VPN and Web server: Installs OpenVPN & Apache on CentOS-based
+# DIY VPN and Web server: Installs OpenVPN & Apache on CentOS-based
 # systems. Tested on Lightsail; be sure to open ports: UDP 1194 & TCP 443.
 # Client configuration files (ovpn, ONC, p12) placed at https://IP/downloads
 # (self-signed cert); username is vpn, password is dropped in ec2-user's home
-# directory (.web). Usage: cd diyvpn && sudo ./build-vpn.sh or
+# directory (.web). Usage: cd diy-vpn && sudo ./build-vpn.sh or
 # paste launchscript.sh into your EC2 user-data/Lightsail launch script
 # window.
 
@@ -219,11 +219,11 @@ printf "* at https://$myip/downloads.       *\n"
 printf "********************************************\n"
 printf "\n\n"
 
-cd /tmp && git clone https://github.com/jharveyvpn/diyvpn.git
-cd /tmp/diyvpn/mkcliconf && sudo python mkcliconf.py
+cd /tmp && git clone https://github.com/jharveyvpn/diy-vpn.git
+cd /tmp/diy-vpn/mkcliconf && sudo python mkcliconf.py
 
 # Move configs to download directory
-sudo mv /tmp/diyvpn/mkcliconf/$myip.* /var/www/html/downloads/
+sudo mv /tmp/diy-vpn/mkcliconf/$myip.* /var/www/html/downloads/
 sudo chown apache:apache /var/www/html/downloads/
 
 

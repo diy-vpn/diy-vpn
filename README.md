@@ -1,6 +1,6 @@
-# diyvpn
+# diy-vpn
 
-Build an OpenVPN-based VPN and secure web server to host configs in less than five minutes on Amazon Lightsail. This is a companion repository for the book DIY VPN: Build Your Own VPN but you don't necessarily need the book to run and use this.
+Build an OpenVPN-based VPN and secure web server to host configs in less than five minutes on Amazon Lightsail. This is a companion repository for the book DIY VPN: Control Your Own VPN but you don't necessarily need the book to run and use this.
 
 Caveat: These scripts were tested on the Amazon Linux AMI and the Ubuntu 16.04 AMI using Amazon EC2/Lightsail, and *should* work on almost any CentOS 7.x or Ubuntu 16.04 install...however, they're intended to be run on single-purpose ephemeral and disposable cloud-based systems -- not production or personal systems. Any time you're letting a random script muck around with your firewall, it's a good idea to use something with a standard configuration that you can painlessly blow away and recreate.
 
@@ -12,13 +12,13 @@ This currently installs 2.3.17 (stable), which has been updated to resolve vulne
 
 1. ssh into your server and run:
 
-    git clone https://github.com/jharveyvpn/diyvpn.git /tmp/diyvpn
+    git clone https://github.com/jharveyvpn/diy-vpn.git /tmp/diy-vpn
 
-2. chmod 755 /tmp/diyvpn/\*.sh
+2. chmod 755 /tmp/diy-vpn/\*.sh
 
 3. Run the following, where *script-name* is ubuntu-vpn.sh if you're using Debian/Ubuntu or build-vpn.sh if you're using CentOS/Red Hat.
 
-    cd /tmp/diyvpn && ./*script-name*.sh
+    cd /tmp/diy-vpn && ./*script-name*.sh
 
 4. When the scripts are finished, jump to step 10 in the Lightsail instructions.
 

@@ -17,11 +17,11 @@ else
  echo "Don't detect RHEL or Debian. Skipping."
 fi
 
-git clone https://github.com/jharveyvpn/diyvpn.git /tmp/diyvpn
-chmod 755 /tmp/diyvpn/*.sh
+git clone https://github.com/jharveyvpn/diy-vpn.git /tmp/diy-vpn
+chmod 755 /tmp/diy-vpn/*.sh
 
 if [ "${ID_LIKE}" = "debian" ]; then
-  cd /tmp/diyvpn && sudo ./ubuntu-vpn.sh
+  cd /tmp/diy-vpn && sudo ./ubuntu-vpn.sh
 else
-  cd /tmp/diyvpn && sudo ./build-vpn.sh
+  cd /tmp/diy-vpn && sudo ./build-vpn.sh
 fi

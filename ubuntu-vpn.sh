@@ -1,10 +1,10 @@
 #!/bin/bash
 
-# 7 minute VPN and Web server: Installs OpenVPN & Apache on Ubuntu-based
+# DIY VPN and Web server: Installs OpenVPN & Apache on Ubuntu-based
 # systems. Tested on Lightsail; be sure to open ports: UDP 1194 & TCP 443.
 # Client configuration files (ovpn, ONC, p12) placed at https://IP/downloads
 # (self-signed cert); username is vpn, password is dropped in ubuntu user's home
-# directory (.web). Usage: cd diyvpn && sudo ./ubuntu-vpn.sh or
+# directory (.web). Usage: cd diy-vpn && sudo ./ubuntu-vpn.sh or
 # paste launchscript.sh into your EC2 user-data/Lightsail launch script
 # window.
 
@@ -215,15 +215,15 @@ printf "\n\n"
 # Pull git repository...might be overkill if running from EC2/Lightsail, but
 # allows everything to work if not using EC2. If it's already there, it's a no-op
 
-cd /tmp && git clone https://github.com/jharveyvpn/diyvpn.git
+cd /tmp && git clone https://github.com/jharveyvpn/diy-vpn.git
 
 # Ubuntu does not have python already?
 
 sudo apt-get install python -y
-cd /tmp/diyvpn/mkcliconf && sudo python mkcliconf.py
+cd /tmp/diy-vpn/mkcliconf && sudo python mkcliconf.py
 
 # Move configs to download directory
-sudo mv /tmp/diyvpn/mkcliconf/$MYIP.* /var/www/html/downloads/
+sudo mv /tmp/diy-vpn/mkcliconf/$MYIP.* /var/www/html/downloads/
 sudo chown www-data:www-data /var/www/html/downloads/
 
 

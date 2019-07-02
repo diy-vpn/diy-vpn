@@ -35,6 +35,14 @@ then
   echo Will place download password at /home/$logname/.web
 fi
 
+# Are we systemdable?
+hostnamectl=`hostnamectl`;if [ -z "$hostnamectl" ]; then systemd="false"; else systemd="true"; fi
+
+echo "systemd status is $systemd"
+
+echo "ID is $ID_LIKE"
+if [[ ${ID_LIKE} == *"rhel"* ]]; then
+
 printf "************************************************************\n"
 printf "* Starting install. Output and errors logged to            *\n"
 printf "* /tmp/$LOG.                                               *\n"
@@ -52,14 +60,26 @@ printf "* Installing OpenVPN *\n"
 printf "**********************\n"
 printf "\n\n"
 # Fix CVE-2017-7479, no longer taking Amazon's base install
-# Build rpm from 2.3.17 source
+# Build rpm from 2.4.7 source
 
 sudo yum -y install gcc rpm-build openssl-devel lzo-devel pam-devel git
 
-cd $STARTDIR && wget https://swupdate.openvpn.org/community/releases/openvpn-2.3.17.tar.gz
+cd $STARTDIR && wget https://swupdate.openvpn.org/community/releases/openvpn-2.4.7.tar.gz
+hostnamectl=`hostnamectl`;if [ -z "$hostnamectl" ]; then systemd="false"; else systemd="true"; fi
 
-cd $STARTDIR && rpmbuild -tb openvpn-2.3.17.tar.gz
-sudo rpm -ivh ~/rpmbuild/RPMS/x86_64/openvpn-2.3.17-1.x86_64.rpm
+echo "systemd status is $systemd"
+
+
+if [[ $systemd=="true" ]];
+then
+  echo $systemd
+  cd $STARTDIR && rpmbuild -tb openvpn-2.4.7.tar.gz --with="enable-systemd=yes"
+else
+  echo $systemd
+  cd $STARTDIR && rpmbuild -tb openvpn-2.4.7.tar.gz
+fi
+
+sudo rpm -ivh ~/rpmbuild/RPMS/x86_64/openvpn-2.4.7-1.x86_64.rpm
 
 printf "*****************************\n"
 printf "* Adding OpenVPN to startup *\n"
@@ -115,8 +135,11 @@ printf "* Building base server.conf file *\n"
 printf "**********************************\n"
 printf "\n\n"
 
+# OpenVPN 2.4 options
+sudo printf "port 1194\nproto udp\nproto udp6\ndev tun\nca /etc/openvpn/easy-rsa/pki/ca.crt\ncert /etc/openvpn/easy-rsa/pki/issued/server.crt\nkey /etc/openvpn/easy-rsa/pki/private/server.key\ndh /etc/openvpn/easy-rsa/pki/dh.pem\nserver 10.8.0.0 255.255.255.0\nifconfig-ipv6 2001:db8:0:123::1 2001:db8:0:123::2\nifconfig-pool-persist ipp.txt\npush \"redirect-gateway def1 bypass-dhcp\"\npush \"redirect-gateway ipv6\"\npush \"route-ipv6 2001:db8:0:abc::/64\"\npush \"route-ipv6 2000::/3\"\npush \"dhcp-option DNS 208.67.222.222\"\npush \"dhcp-option DNS 208.67.220.220\"\nduplicate-cn\nkeepalive 10 120\ntls-auth /etc/openvpn/easy-rsa/ta.key 0\ncipher AES-256-CBC\nuser nobody\ngroup nobody\npersist-key\npersist-tun\nstatus openvpn-status.log\nverb 3\nexplicit-exit-notify 1\ntls-version-min 1.2\nauth SHA256\ntls-cipher TLS-ECDHE-RSA-WITH-AES-256-GCM-SHA384:TLS-ECDHE-ECDSA-WITH-AES-256-GCM-SHA384:TLS-ECDHE-RSA-WITH-AES-256-CBC-SHA384:TLS-DHE-RSA-WITH-AES-256-GCM-SHA384:TLS-DHE-RSA-WITH-AES-256-CBC-SHA\n#plugin /usr/lib64/openvpn/plugin/lib/openvpn-auth-pam.so login" >> /etc/openvpn/server.conf
 
-sudo printf "port 1194\nproto udp\ndev tun\nca /etc/openvpn/easy-rsa/pki/ca.crt\nkey /etc/openvpn/easy-rsa/pki/private/server.key\ncert /etc/openvpn/easy-rsa/pki/issued/server.crt\ndh /etc/openvpn/easy-rsa/pki/dh.pem\nserver 10.8.0.0 255.255.255.0\nifconfig-pool-persist ipp.txt\npush \"redirect-gateway def1 bypass-dhcp\"\npush \"dhcp-option DNS 10.8.0.1\"\npush \"dhcp-option DNS 208.67.222.222\"\npush \"dhcp-option DNS 208.67.220.220\"\nduplicate-cn\nkeepalive 10 60\ntls-version-min 1.2 #Note: Disable if you support Chromebooks\ntls-cipher TLS-DHE-RSA-WITH-AES-256-GCM-SHA384:TLS-DHE-RSA-WITH-AES-256-CBC-SHA\ncipher AES-256-CBC\ntls-auth /etc/openvpn/easy-rsa/ta.key 0\ncomp-lzo\nuser nobody\ngroup nobody\npersist-key\npersist-tun\nstatus openvpn-status.log\nlog /var/log/openvpn.log\nverb 3\nauth SHA256\nserver-ipv6 2001:db8:0:123::/64\ntun-ipv6\npush tun-ipv6\nifconfig-ipv6 2001:db8:0:123::1 2001:db8:0:123::2\npush \"route-ipv6 2001:db8:0:abc::/64\"\npush \"route-ipv6 2000::/3\"\nproto udp6\n#plugin /usr/lib64/openvpn/plugin/lib/openvpn-auth-pam.so login" >> /etc/openvpn/server.conf
+# OpenVPN 2.3 options
+#sudo printf "port 1194\nproto udp\ndev tun\nca /etc/openvpn/easy-rsa/pki/ca.crt\nkey /etc/openvpn/easy-rsa/pki/private/server.key\ncert /etc/openvpn/easy-rsa/pki/issued/server.crt\ndh /etc/openvpn/easy-rsa/pki/dh.pem\nserver 10.8.0.0 255.255.255.0\nifconfig-pool-persist ipp.txt\npush \"redirect-gateway def1 bypass-dhcp\"\npush \"dhcp-option DNS 10.8.0.1\"\npush \"dhcp-option DNS 208.67.222.222\"\npush \"dhcp-option DNS 208.67.220.220\"\nduplicate-cn\nkeepalive 10 60\ntls-version-min 1.2 #Note: Disable if you support Chromebooks\ntls-cipher TLS-DHE-RSA-WITH-AES-256-GCM-SHA384:TLS-DHE-RSA-WITH-AES-256-CBC-SHA\ncipher AES-256-CBC\ntls-auth /etc/openvpn/easy-rsa/ta.key 0\ncomp-lzo\nuser nobody\ngroup nobody\npersist-key\npersist-tun\nstatus openvpn-status.log\nlog /var/log/openvpn.log\nverb 3\nauth SHA256\nserver-ipv6 2001:db8:0:123::/64\ntun-ipv6\npush tun-ipv6\nifconfig-ipv6 2001:db8:0:123::1 2001:db8:0:123::2\npush \"route-ipv6 2001:db8:0:abc::/64\"\npush \"route-ipv6 2000::/3\"\nproto udp6\n#plugin /usr/lib64/openvpn/plugin/lib/openvpn-auth-pam.so login" >> /etc/openvpn/server.conf
 
 # Set up NAT
 printf "**********************\n"
@@ -132,10 +155,15 @@ sudo service iptables save
 sudo service iptables restart
 
 # Enable IP forwarding
-# For Lightsail Amazon Linux with config in sysctl
-sed -i "s/net.ipv4.ip_forward = 0/net.ipv4.ip_forward = 1/g" /etc/sysctl.conf
-# For Amazon Linux 2
-sudo echo "net.ipv4.ip_forward = 1" >> /etc/sysctl.d/11-sysctl.conf
+
+if [[ $systemd=="true" ]];
+then
+  sudo echo "net.ipv4.ip_forward = 1" >> /tmp/11-sysctl.conf
+  sudo mv /tmp/11-sysctl.conf /etc/sysctl.d/11-sysctl.conf
+else
+  sudo sed -i "s/net.ipv4.ip_forward = 0/net.ipv4.ip_forward = 1/g" /etc/sysctl.conf
+fi
+
 sudo sysctl --system
 
 printf "********************\n"

@@ -4,7 +4,7 @@ Build an OpenVPN-based VPN and secure web server to host configs in less than fi
 
 Caveat: These scripts were tested on the Amazon Linux AMI and the Ubuntu 16.04 AMI using Amazon EC2/Lightsail, and *should* work on almost any CentOS 7.x or Ubuntu 16.04 install...however, they're intended to be run on single-purpose ephemeral and disposable cloud-based systems -- not production or personal systems. Any time you're letting a random script muck around with your firewall, it's a good idea to use something with a standard configuration that you can painlessly blow away and recreate.
 
-This currently installs 2.3.17 (stable), which has been updated to resolve vulnerabilities reported in recent security audits. 2.4.2 coming sometime soon.
+This currently installs 2.4.7 (stable).
 
 ## Instructions
 

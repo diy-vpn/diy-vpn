@@ -62,12 +62,12 @@ printf "\n\n"
 sudo yum -y install gcc rpm-build openssl-devel lzo-devel pam-devel git
 
 cd $STARTDIR && wget https://swupdate.openvpn.org/community/releases/openvpn-2.4.7.tar.gz
-hostnamectl=`hostnamectl`;if [ -z "$hostnamectl" ]; then systemd="false"; else systemd="true"; fi
 
-echo "systemd status is $systemd"
-
-
-cd $STARTDIR && rpmbuild -tb openvpn-2.4.7.tar.gz
+if [[ $systemd = "true" ]];
+  cd $STARTDIR && rpmbuild -tb openvpn-2.4.7.tar.gz --with="enablesystemd=yes"
+else
+  cd $STARTDIR && rpmbuild -tb openvpn-2.4.7.tar.gz
+fi 
 
 sudo rpm -ivh ~/rpmbuild/RPMS/x86_64/openvpn-2.4.7-1.x86_64.rpm
 
@@ -146,15 +146,15 @@ sudo service iptables restart
 
 # Enable IP forwarding
 
-if [[ $systemd=="true" ]];
+if [[ $systemd = "true" ]];
 then
   sudo echo "net.ipv4.ip_forward = 1" >> /tmp/11-sysctl.conf
   sudo mv /tmp/11-sysctl.conf /etc/sysctl.d/11-sysctl.conf
+  sudo sysctl --system
 else
   sudo sed -i "s/net.ipv4.ip_forward = 0/net.ipv4.ip_forward = 1/g" /etc/sysctl.conf
+  sudo sysctl -p
 fi
-
-sudo sysctl --system
 
 printf "********************\n"
 printf "* Starting OpenVPN *\n"

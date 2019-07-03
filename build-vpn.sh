@@ -40,9 +40,6 @@ hostnamectl=`hostnamectl`;if [ -z "$hostnamectl" ]; then systemd="false"; else s
 
 echo "systemd status is $systemd"
 
-echo "ID is $ID_LIKE"
-if [[ ${ID_LIKE} == *"rhel"* ]]; then
-
 printf "************************************************************\n"
 printf "* Starting install. Output and errors logged to            *\n"
 printf "* /tmp/$LOG.                                               *\n"
@@ -274,3 +271,4 @@ printf "* password in /home/[user]/.web and download your client        *\n"
 printf "*  configuration file (files if using Chromebook).              *\n"
 printf "*****************************************************************\n"
 printf "\n\n\n\n"
+

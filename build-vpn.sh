@@ -67,14 +67,7 @@ hostnamectl=`hostnamectl`;if [ -z "$hostnamectl" ]; then systemd="false"; else s
 echo "systemd status is $systemd"
 
 
-if [[ $systemd=="true" ]];
-then
-  echo $systemd
-  cd $STARTDIR && rpmbuild -tb openvpn-2.4.7.tar.gz --with="enable-systemd=yes"
-else
-  echo $systemd
-  cd $STARTDIR && rpmbuild -tb openvpn-2.4.7.tar.gz
-fi
+cd $STARTDIR && rpmbuild -tb openvpn-2.4.7.tar.gz
 
 sudo rpm -ivh ~/rpmbuild/RPMS/x86_64/openvpn-2.4.7-1.x86_64.rpm
 

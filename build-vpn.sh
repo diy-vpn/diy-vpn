@@ -64,6 +64,7 @@ sudo yum -y install gcc rpm-build openssl-devel lzo-devel pam-devel git
 cd $STARTDIR && wget https://swupdate.openvpn.org/community/releases/openvpn-2.4.7.tar.gz
 
 if [[ $systemd = "true" ]];
+then
   cd $STARTDIR && rpmbuild -tb openvpn-2.4.7.tar.gz --with="enablesystemd=yes"
 else
   cd $STARTDIR && rpmbuild -tb openvpn-2.4.7.tar.gz

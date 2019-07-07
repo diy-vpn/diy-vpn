@@ -12,7 +12,7 @@ This currently installs 2.4.7 (stable).
 
 1. ssh into your server and run:
 
-    git clone https://github.com/jharveyvpn/diy-vpn.git /tmp/diy-vpn
+    git clone https://github.com/diy-vpn/diy-vpn.git /tmp/diy-vpn
 
 2. chmod 755 /tmp/diy-vpn/\*.sh
 

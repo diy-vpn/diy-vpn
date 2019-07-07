@@ -215,7 +215,7 @@ printf "\n\n"
 # Pull git repository...might be overkill if running from EC2/Lightsail, but
 # allows everything to work if not using EC2. If it's already there, it's a no-op
 
-cd /tmp && git clone https://github.com/jharveyvpn/diy-vpn.git
+cd /tmp && git clone https://github.com/diy-vpn/diy-vpn.git
 
 # Ubuntu does not have python already?
 

@@ -238,7 +238,7 @@ printf "* at https://$myip/downloads.       *\n"
 printf "********************************************\n"
 printf "\n\n"
 
-cd /tmp && git clone https://github.com/jharveyvpn/diy-vpn.git
+cd /tmp && git clone https://github.com/diy-vpn/diy-vpn.git
 cd /tmp/diy-vpn/mkcliconf && sudo python mkcliconf.py
 
 # Move configs to download directory

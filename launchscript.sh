@@ -17,7 +17,7 @@ else
  echo "Don't detect RHEL or Debian. Skipping."
 fi
 
-git clone https://github.com/jharveyvpn/diy-vpn.git /tmp/diy-vpn
+git clone https://github.com/diy-vpn/diy-vpn.git /tmp/diy-vpn
 chmod 755 /tmp/diy-vpn/*.sh
 
 if [ "${ID_LIKE}" = "debian" ]; then
